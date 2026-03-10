@@ -1,9 +1,9 @@
 /**
  * Doctor Check: Entity Registry
  *
- * Validates .aiox-core/data/entity-registry.yaml exists and mtime < 48h.
+ * Validates .aios-core/data/entity-registry.yaml exists and mtime < 48h.
  *
- * @module aiox-core/doctor/checks/entity-registry
+ * @module aios-core/doctor/checks/entity-registry
  * @story INS-4.1
  */
 
@@ -15,14 +15,14 @@ const name = 'entity-registry';
 const MAX_AGE_MS = 48 * 60 * 60 * 1000; // 48 hours
 
 async function run(context) {
-  const registryPath = path.join(context.projectRoot, '.aiox-core', 'data', 'entity-registry.yaml');
+  const registryPath = path.join(context.projectRoot, '.aios-core', 'data', 'entity-registry.yaml');
 
   if (!fs.existsSync(registryPath)) {
     return {
       check: name,
       status: 'FAIL',
       message: 'entity-registry.yaml not found',
-      fixCommand: 'npx aiox-core install --force',
+      fixCommand: 'node bin/aios.js sync --full',
     };
   }
 
@@ -38,7 +38,7 @@ async function run(context) {
       check: name,
       status: 'WARN',
       message: `entity-registry.yaml is ${ageHours}h old (threshold: 48h), ~${lineCount} lines`,
-      fixCommand: 'npx aiox-core install --force',
+      fixCommand: 'node bin/aios.js sync --full',
     };
   }
 
